@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<!-- 	注意顺序：properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,plugins?,environments?,databaseIdProvider?,mappers?)"。 -->
+
+	<!-- 引用db.properties配置文件 -->
+	<properties resource="db.properties" />
+	
+	<typeAliases>
+		<!--为user类配置别名 -->
+<!-- 		<typeAlias type="com.xhf.test.ssm.dao.entity.User" alias="User" /> -->
+		<!-- 配置整个包下的实体类的别名，此时别名就是实际的类名（非全路径） -->
+		<package name="com.xhf.test.ssm.dao.entity"/>
+	</typeAliases>
+
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<!-- 配置数据库连接信息 -->
+			<dataSource type="POOLED">
+				<property name="driver" value="${db.driver}" />
+				<property name="url" value="${db.url}" />
+				<property name="username" value="${db.username}" />
+				<property name="password" value="${db.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<!-- 注册userMapper.xml文件， userMapper.xml位于me.gacl.mapping这个包下，所以resource写成me/gacl/mapping/userMapper.xml -->
+		<mapper resource="sqlmapper/userMapper.xml" />
+		<mapper resource="sqlmapper/sysUserMapper.xml" />
+	</mappers>
+	
+	
+
+	
+</configuration>

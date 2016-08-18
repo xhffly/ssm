@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的 
+	例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀) -->
+<mapper namespace="sysUser">
+
+	<!-- 根据用户id查询用户信息(带部门的信息) 
+		##1. 联表查询 
+		SELECT * FROM user u,department d WHERE d.id=u.dept_id AND u.id=1; 
+		
+		##2. 执行两次查询 
+		SELECT * FROM user WHERE id=1; //id=1 
+		SELECT * FROM department WHERE id=1;//使用上面得到的dept_id 
+	-->
+
+	<!-- 方式一：嵌套结果：使用嵌套结果映射来处理重复的联合结果的子集 封装联表查询的数据(去除重复的数据)
+	SELECT * FROM user u,department d WHERE d.id=u.dept_id AND u.id=1; 
+	-->
+	<select id="getSysUser" parameterType="String" resultMap="UserResultMap">
+		SELECT u.*,d.name dname,d.id did FROM user u,department d WHERE d.id=u.dept_id AND u.id=#{id}
+	</select>
+	<!-- 使用resultMap映射实体类和字段之间的一一对应关系 -->
+	<resultMap type="SysUser" id="UserResultMap">
+		<id property="id" column="id" />
+		<result property="loginName" column="login_name" />
+		<result property="name" column="name" />
+		<association property="dept" javaType="Department">
+			<id property="id" column="did" />
+			<result property="name" column="dname" />
+		</association>
+	</resultMap>
+
+	<!-- 方式二：嵌套查询：通过执行另外一个SQL映射语句来返回预期的复杂类型 
+		SELECT * FROM class WHERE c_id=1; 
+		SELECT * FROM teacher WHERE t_id=1 //1 是上一个查询得到的teacher_id的值 -->
+	<select id="getSysUser2" parameterType="String" resultMap="UserResultMap2">
+		select * from user where id=#{id}
+	</select>
+	<!-- 使用resultMap映射实体类和字段之间的一一对应关系 -->
+	<resultMap type="SysUser" id="UserResultMap2">
+<!-- 		<id property="id" column="c_id" /> -->
+		<result property="loginName" column="login_name" />
+		<association property="dept" column="dept_id"
+			select="getDept" />
+	</resultMap>
+
+	<select id="getDept" parameterType="String" resultType="Department">
+		SELECT * FROM department WHERE id=#{id}
+	</select>
+
+	<!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为getUser，id属性值必须是唯一的，不能够重复 使用parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型 
+		resultType="me.gacl.domain.User"就表示将查询结果封装成一个User类的对象返回 User类就是users表所对应的实体类 -->
+	<!-- 根据id查询得到一个user对象 -->
+<!-- 	<select id="getSysUser" parameterType="string" resultMap="sysUserResultMap"> -->
+<!-- 		select * from user where id=#{id} -->
+<!-- 	</select> -->
+
+	<!--通过<resultMap>映射实体类属性名和表的字段名对应关系 (近对应无法对应的字段即可，如数据库字段名与实体名不一致，loginName：LOGIN_NAME) -->
+<!-- 	<resultMap type="SysUser" id="sysUserResultMap"> -->
+		<!-- 用id属性来映射主键字段 -->
+		<!-- <id property="id" column="order_id" /> -->
+		<!-- 用result属性来映射非主键字段 -->
+<!-- 		<result property="loginName" column="login_name" /> -->
+<!-- 	</resultMap> -->
+
+</mapper>
