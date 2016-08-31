@@ -1,4 +1,4 @@
-package com.xhf.test.ssm.dao.entity;
+package com.xhf.test.ssm.entity;
 
 public class User {
 	private String id;

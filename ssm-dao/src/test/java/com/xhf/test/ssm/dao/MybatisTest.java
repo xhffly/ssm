@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xhf.test.ssm.dao.entity.User;
+import com.xhf.test.ssm.entity.User;
 
 public class MybatisTest {
 

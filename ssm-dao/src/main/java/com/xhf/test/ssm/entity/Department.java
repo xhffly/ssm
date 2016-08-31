@@ -1,4 +1,4 @@
-package com.xhf.test.ssm.dao.entity;
+package com.xhf.test.ssm.entity;
 
 /**
  * 部门表 1、测试和用户的关联关系	                                                                                                 

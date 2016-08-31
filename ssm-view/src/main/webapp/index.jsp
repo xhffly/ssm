@@ -10,7 +10,10 @@
 <head>
     <title>SSMTEST</title>
 </head>
+
 <body>
-    SSMTEST
+	<script type="text/javascript">
+		window.location.href="${pageContext.request.contextPath }/login.jsp";
+	</script>
 </body>
 </html>

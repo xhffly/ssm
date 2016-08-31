@@ -2,7 +2,7 @@ package com.xhf.test.ssm.dao;
 
 import org.junit.Test;
 
-import com.xhf.test.ssm.dao.entity.SysUser;
+import com.xhf.test.ssm.entity.SysUser;
 
 public class UserDaoTest {
 

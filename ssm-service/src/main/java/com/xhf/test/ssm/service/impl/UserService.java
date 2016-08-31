@@ -2,7 +2,7 @@ package com.xhf.test.ssm.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.xhf.test.ssm.dao.entity.SysUser;
+import com.xhf.test.ssm.entity.SysUser;
 import com.xhf.test.ssm.service.IUserService;
 
 @Service

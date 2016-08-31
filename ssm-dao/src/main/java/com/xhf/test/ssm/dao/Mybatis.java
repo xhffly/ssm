@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.xhf.test.ssm.dao.entity.User;
+import com.xhf.test.ssm.entity.User;
 
 public class Mybatis {
 	

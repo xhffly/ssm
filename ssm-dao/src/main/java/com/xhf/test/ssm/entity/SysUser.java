@@ -1,4 +1,4 @@
-package com.xhf.test.ssm.dao.entity;
+package com.xhf.test.ssm.entity;
 
 /**
  * 用户实体类，1、测试表字段与实体属性无法对应	 2、测试关联关系                                                                                                

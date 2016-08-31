@@ -3,7 +3,7 @@ package com.xhf.test.ssm.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.xhf.test.ssm.dao.entity.SysUser;
+import com.xhf.test.ssm.entity.SysUser;
 
 @Repository
 public class UserDao {
