@@ -15,6 +15,7 @@ import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+
 /**
  * CSV导入导出工具集合
  * 	                                                                                                 
@@ -91,44 +92,36 @@ public class CSVUtils {
 	 * @param file
 	 * @return
 	 */
-	public static List<String[]> readCsv(File file,String charset) {
-		
+	public static List<String[]> readCsv(File file, String charset)  {
+
 		List<String[]> dataList = new ArrayList<String[]>();
 
-//		BufferedReader br = null;
-//		try {
-//			br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"GBK"));
-//			String line = "";
-//			while ((line = br.readLine()) != null) {
-//				String[] dataRow = line.split(",");
-//				dataList.add(dataRow);
-//			}
-//		} catch (Exception e) {
-//		} finally {
-//			if (br != null) {
-//				try {
-//					br.close();
-//					br = null;
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
+		BufferedReader fReader = null;
+		CSVReader csvReader = null;
 		try {
 			Charset c = Charset.forName(charset);
-			BufferedReader fReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),c));
-			CSVReader csvReader = new CSVReader(fReader, ',');
+			fReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), c));
+			csvReader = new CSVReader(fReader, ',');
 			dataList = csvReader.readAll();
-
-			csvReader.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally{
-			
+		} finally {
+			try {
+				if (fReader != null) {
+					fReader.close();
+					fReader = null;
+				}
+				if (csvReader != null) {
+					csvReader.close();
+					csvReader = null;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return dataList;
 	}
