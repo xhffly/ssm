@@ -13,7 +13,7 @@ public class CSVUtilsTest extends TestCase {
 
 	public void testReadCsv() {
 		File file = new File("D:/csvtest.csv");
-		List<String[]> dataList = CSVUtils.readCsv(file);
+		List<String[]> dataList = CSVUtils.readCsv(file,"GBK");
 		
 		System.out.println(dataList.get(1)[1]);
 	}

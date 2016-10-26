@@ -4,12 +4,16 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * CSV导入导出工具集合
@@ -87,31 +91,45 @@ public class CSVUtils {
 	 * @param file
 	 * @return
 	 */
-	public static List<String[]> readCsv(File file) {
+	public static List<String[]> readCsv(File file,String charset) {
 		
 		List<String[]> dataList = new ArrayList<String[]>();
-		List<String> dataStrList = new ArrayList<String>();
 
-		BufferedReader br = null;
+//		BufferedReader br = null;
+//		try {
+//			br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"GBK"));
+//			String line = "";
+//			while ((line = br.readLine()) != null) {
+//				String[] dataRow = line.split(",");
+//				dataList.add(dataRow);
+//			}
+//		} catch (Exception e) {
+//		} finally {
+//			if (br != null) {
+//				try {
+//					br.close();
+//					br = null;
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"GBK"));
-			String line = "";
-			while ((line = br.readLine()) != null) {
-				String[] dataRow = line.split(",");
-				dataList.add(dataRow);
-			}
-		} catch (Exception e) {
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-					br = null;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+			Charset c = Charset.forName(charset);
+			BufferedReader fReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),c));
+			CSVReader csvReader = new CSVReader(fReader, ',');
+			dataList = csvReader.readAll();
 
+			csvReader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			
+		}
 		return dataList;
 	}
 	
