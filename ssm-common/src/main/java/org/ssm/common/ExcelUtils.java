@@ -1,12 +1,10 @@
-package net.jqsoft.common.util;
+package org.ssm.common;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,14 +17,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -38,9 +31,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.fr.stable.StringUtils;
 
-import net.jqsoft.common.exception.ManagerException;
 
 public class ExcelUtils {
 	
@@ -53,13 +44,13 @@ public class ExcelUtils {
 	 * @param startCol 开始解析数据的列 从0开始
 	 * @param endCol   解析结束的列 从0开始
 	 * @return
-	 * @throws ManagerException
+	 * @throws Exception
 	 */
-	public static List<String[]> readFile(String filePath,int startRow,int startCol,int endCol) throws ManagerException{
+	public static List<String[]> readFile(String filePath,int startRow,int startCol,int endCol) throws Exception{
 		
 		
 		if(startCol == endCol || startCol > endCol || endCol == 0){
-			throw new ManagerException("startCol必须大于endCol，且endCol不能等于零");
+			throw new Exception("startCol必须大于endCol，且endCol不能等于零");
 		}
 		
 		//最终返回的excel内容
@@ -76,7 +67,7 @@ public class ExcelUtils {
 
 
 			if (!excelFile.exists()) {// 文件不存在，不继续执行
-				throw new ManagerException("Excel文件导入-上传文件未找到！");
+				throw new Exception("Excel文件导入-上传文件未找到！");
 			}
 
 			// 创建工作表对象
@@ -91,7 +82,7 @@ public class ExcelUtils {
 			// 获取第一个Sheet
 			Sheet sheet = workbook.getSheetAt(0);
 			if (sheet == null) {
-				throw new ManagerException("Excel文件导入-文件中没有找到对应工作表");
+				throw new Exception("Excel文件导入-文件中没有找到对应工作表");
 			}
 
 			// 开始从第一行遍历
@@ -121,14 +112,11 @@ public class ExcelUtils {
 			}
 			
 		} catch (FileNotFoundException e) {
-			throw new ManagerException("Excel文件导入-上传文件未找到"+e.getMessage());
+			throw new Exception("Excel文件导入-上传文件未找到"+e.getMessage());
 		} catch (IOException e) {
-			throw new ManagerException("Excel文件导入-文件读取失败"+e.getMessage());
-		} catch (ManagerException e) {
-			throw new ManagerException("Excel文件导入-"+e.getMessage());
+			throw new Exception("Excel文件导入-文件读取失败"+e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ManagerException("Excel文件导入-文件读取失败:"+e.getMessage());
+			throw new Exception("Excel文件导入-"+e.getMessage());
 		} finally {
 			try {
 				if (inputStream != null) {
@@ -140,7 +128,7 @@ public class ExcelUtils {
 					os = null;
 				}
 			} catch (IOException e) {
-				throw new ManagerException("100200","Excel文件导入-文件读取失败:"+e.getMessage());
+				throw new Exception("Excel文件导入-文件读取失败:"+e.getMessage());
 			}
 		}
 		return excelContents;
@@ -264,7 +252,7 @@ public class ExcelUtils {
 		try {
 			File tempFile = new File(ExcelUtils.getWebContentPath()+tempPath);
 			if (!tempFile.exists()) {// 文件不存在，不继续执行
-				throw new ManagerException("模版文件未找到！");
+				throw new Exception("模版文件未找到！");
 			}
 			//读取模版文件
 			// 创建工作表对象
@@ -429,22 +417,22 @@ public class ExcelUtils {
         style.setFont(f);
         return style;
     }
-
-    /**
-     * 使文件名不乱码(针对不同内核的浏览器返回不同编码的文件名)
-     * @param fileName
-     * @param request
-     */
-    public static String encodeFileName(String fileName,HttpServletRequest request) throws Exception{
-        String userAgent = request.getHeader("User-Agent");
-        //针对IE或者以IE为内核的浏览器：
-        if (userAgent.contains("MSIE")||userAgent.contains("Trident")) {
-            fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
-        } else {
-            //非IE浏览器的处理：
-            fileName = new String(fileName.getBytes("UTF-8"),"ISO-8859-1");
-        }
-        return fileName;
-    }
-    
+//
+//    /**
+//     * 使文件名不乱码(针对不同内核的浏览器返回不同编码的文件名)
+//     * @param fileName
+//     * @param request
+//     */
+//    public static String encodeFileName(String fileName,HttpServletRequest request) throws Exception{
+//        String userAgent = request.getHeader("User-Agent");
+//        //针对IE或者以IE为内核的浏览器：
+//        if (userAgent.contains("MSIE")||userAgent.contains("Trident")) {
+//            fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+//        } else {
+//            //非IE浏览器的处理：
+//            fileName = new String(fileName.getBytes("UTF-8"),"ISO-8859-1");
+//        }
+//        return fileName;
+//    }
+//    
 }
